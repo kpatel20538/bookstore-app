@@ -1,0 +1,25 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel serve --https ./src/index.html ",
+    "build": "parcel serve --public-url=/static ./src/index/html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-router": "5.2.0",
+    "react-router-dom": "5.2.0",
+    "rbx": "2.2.0",
+    "tslib": "2.0.0",
+    "gotrue-js": "0.9.26"
+  },
+  "devDependencies": {
+    "parcel": "next"
+  }
+}
