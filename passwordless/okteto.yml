@@ -1,0 +1,11 @@
+name: passwordless-deployment
+command:
+- sh
+workdir: /app
+forward:
+- 9229:9229
+- 8080:8080
+resources:
+  limits:
+    cpu: "1"
+    memory: 2Gi
