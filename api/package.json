@@ -1,0 +1,25 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "publish": "npm run docker:build && npm run docker:build-dev && npm run docker:push && npm run docker:push-dev",
+    "docker:build": "sudo docker build --target prod -t kpatel20538/bookstore-app:api .",
+    "docker:build-dev": "sudo docker build --target dev -t kpatel20538/bookstore-app:api-dev .",
+    "docker:push": "sudo docker push kpatel20538/bookstore-app:api",
+    "docker:push-dev": "sudo docker push kpatel20538/bookstore-app:api-dev"
+  },
+  "private": "true",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "accesscontrol": "^2.2.1",
+    "apollo-datasource-rest": "^0.9.3",
+    "apollo-server": "^2.16.0",
+    "cassandra-driver": "^4.5.2",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
