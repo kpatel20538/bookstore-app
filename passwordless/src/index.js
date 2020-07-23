@@ -68,33 +68,16 @@ router.get("/auth/verify", async (ctx) => {
     const claims = await fetchClaims(subject);
     // TODO: Replace with authenication code
     const access_token = jwt.signAccessToken({ subject, claims });
-    ctx.redirect(
-      `${process.env.SUCCESS_REDIRECT}?${qs.stringify({ access_token })}`
-    );
+    const uri = `${process.env.SUCCESS_REDIRECT}?${qs.stringify({
+      access_token,
+    })}`;
+    console.log(uri);
+    ctx.redirect(uri);
   } catch (err) {
     console.error(err);
     ctx.redirect(process.env.FAILED_REDIRECT);
   }
 });
-
-/* router.get("/auth/claims", (ctx) => {
-  console.log(`CLAIMS`);
-  try {
-    ctx.body = {
-      status: "Logged In",
-      token: jwt.verifyAccessToken(ctx.cookies.get("token")),
-    };
-  } catch {
-    ctx.body = { status: "Not Logged In" };
-  }
-});
-
-router.get("/auth/logout", (ctx) => {
-  console.log(`LOGOUT`);
-  ctx.cookies.set("token", "");
-  ctx.body = { status: "OK" };
-});
- */
 
 app.use(cors());
 app.use(bodyParser());

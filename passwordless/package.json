@@ -7,8 +7,8 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "publish": "npm run docker:build && npm run docker:push",
-    "docker:build": "sudo docker build -t kpatel20538/bookstore-app:api .",
-    "docker:push": "sudo docker push kpatel20538/bookstore-app:api"
+    "docker:build": "sudo docker build -t kpatel20538/bookstore-app:passwordless .",
+    "docker:push": "sudo docker push kpatel20538/bookstore-app:passwordless"
   },
   "keywords": [],
   "author": "",
