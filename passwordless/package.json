@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "publish": "npm run docker:build && npm run docker:push",
+    "docker:build": "sudo docker build -t kpatel20538/bookstore-app:api .",
+    "docker:push": "sudo docker push kpatel20538/bookstore-app:api"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +22,8 @@
     "koa-bodyparser": "^4.3.0",
     "node-fetch": "^2.6.0",
     "nodemailer": "^6.4.10"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }

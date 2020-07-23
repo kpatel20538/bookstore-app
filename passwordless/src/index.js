@@ -53,7 +53,7 @@ router.post("/auth/send", async (ctx) => {
     { method: "POST" }
   );
 
-  const info = await response.text()
+  const info = await response.text();
 
   console.log(`SEND:MESSAGE ${info}`);
   ctx.body = { status: "OK" };
@@ -66,16 +66,18 @@ router.get("/auth/verify", async (ctx) => {
 
     console.log(`VEFIFICATION SUCCESSFUL: ${subject}`);
     const claims = await fetchClaims(subject);
-    const access = jwt.signAccessToken({ subject, claims });
-    ctx.cookies.set("token", access);
-    ctx.redirect(process.env.SUCCESS_REDIRECT);
+    // TODO: Replace with authenication code
+    const access_token = jwt.signAccessToken({ subject, claims });
+    ctx.redirect(
+      `${process.env.SUCCESS_REDIRECT}?${qs.stringify({ access_token })}`
+    );
   } catch (err) {
     console.error(err);
     ctx.redirect(process.env.FAILED_REDIRECT);
   }
 });
 
-router.get("/auth/claims", (ctx) => {
+/* router.get("/auth/claims", (ctx) => {
   console.log(`CLAIMS`);
   try {
     ctx.body = {
@@ -92,6 +94,7 @@ router.get("/auth/logout", (ctx) => {
   ctx.cookies.set("token", "");
   ctx.body = { status: "OK" };
 });
+ */
 
 app.use(cors());
 app.use(bodyParser());
