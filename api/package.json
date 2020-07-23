@@ -16,10 +16,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@koa/router": "^9.3.1",
     "accesscontrol": "^2.2.1",
     "apollo-datasource-rest": "^0.9.3",
     "apollo-server": "^2.16.0",
+    "apollo-server-koa": "^2.16.0",
     "cassandra-driver": "^4.5.2",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.13.0"
   }
 }

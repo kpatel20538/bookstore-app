@@ -15,7 +15,7 @@ spec:
         backend:
           serviceName: minio
           servicePort: 9000
-      - path: /
+      - path: /graphql
         backend:
           serviceName: api-service
           servicePort: 8080
