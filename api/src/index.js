@@ -2,6 +2,8 @@ const { ApolloServer, gql } = require("apollo-server-koa");
 const Koa = require("koa");
 const Router = require("@koa/router");
 
+const jwt = require("./jwt");
+
 const typeDefs = gql`
   type Book {
     title: String
@@ -26,15 +28,20 @@ const books = [
 
 const resolvers = {
   Query: {
-    books: () => books,
+    books: (...args) => {
+      console.log(args);
+      return books
+    },
   },
 };
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => {
-    return {};
+  context: ({ctx}) => {
+    return {
+      claims: jwt.verifyAccessToken(ctx.cookies.get("token")),
+    };
   },
 });
 
