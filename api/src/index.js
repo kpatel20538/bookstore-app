@@ -2,11 +2,7 @@ const { ApolloServer, gql } = require("apollo-server-koa");
 const createServer = require("./router");
 const AuthDirective = require("./auth-directive");
 const jwt = require("./jwt");
-/* 
-    @auth(role: ADMIN, possession: ANY, attributes: ["*"])
-    @auth(role: VISITOR, possession: ANY, attributes: ["title", "author"])
-    @auth(role: CUSTOMER, possession: ANY, attributes: ["*", "!sales"])
-    @auth(role: CUSTOMER, possession: OWN, attributes: ["*"]) */
+
 const typeDefs = gql`
   directive @auth(rules: [AuthRule!]!) on OBJECT
   input AuthRule {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 // import App from './App';
+import static from "./static.yaml";
 import {
   Box,
   Input,
@@ -53,7 +54,10 @@ const App = () => {
     "access_token"
   );
   const [email, setEmail] = useState("");
-  const [submit, { data: sent, loading: sending, error: sendError }] = useAsyncFn(() =>
+  const [
+    submit,
+    { data: sent, loading: sending, error: sendError },
+  ] = useAsyncFn(() =>
     fetch(`${BOOKSTORE_HOSTNAME}/auth/send`, {
       method: "POST",
       headers: {
@@ -123,14 +127,23 @@ const App = () => {
                   Send Auth Link
                 </Button>
                 <Button
-                  onClick={() => (window.location = "/")}
+                  onClick={() => (window.location = "/static/index.html")}
                   disabled={!access_token}
                 >
                   Logout
                 </Button>
               </Button.Group>
             </Box>
-
+          </Column>
+        </Column.Group>
+        <Column.Group centered>
+          <Column size={6}>
+            <Message color="warning">
+              <Message.Header>GraphQL Schema</Message.Header>
+              <Message.Body as="pre">{static.schema}</Message.Body>
+            </Message>
+          </Column>
+          <Column size={6}>
             <Message color="info">
               <Message.Header>GraphQL Result</Message.Header>
               <Message.Body as="pre">
