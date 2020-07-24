@@ -12,6 +12,7 @@ import {
   Section,
   Container,
   Column,
+  Loader,
 } from "rbx";
 import "rbx/index.css";
 
@@ -38,7 +39,7 @@ const useAsyncFn = (fn) => {
 
 const handleResponse = (response) =>
   response.text().then((text) => {
-    console.log(response)
+    console.log(response);
     if (!response.ok) {
       throw new Error(text);
     }
@@ -48,8 +49,11 @@ const handleResponse = (response) =>
 const BOOKSTORE_HOSTNAME = "https://bookstore-kpatel20538.cloud.okteto.net";
 
 const App = () => {
+  const access_token = new URL(window.location).searchParams.get(
+    "access_token"
+  );
   const [email, setEmail] = useState("");
-  const [submit, { loading: sending, error: sendError }] = useAsyncFn(() =>
+  const [submit, { data: sent, loading: sending, error: sendError }] = useAsyncFn(() =>
     fetch(`${BOOKSTORE_HOSTNAME}/auth/send`, {
       method: "POST",
       headers: {
@@ -58,20 +62,35 @@ const App = () => {
       body: JSON.stringify({ email }),
     }).then(handleResponse)
   );
-  const [
-    check,
-    { data: claims, loading: checking, error: checkingError },
-  ] = useAsyncFn(() =>
-    fetch(`${BOOKSTORE_HOSTNAME}/auth/claims`).then(handleResponse)
-  );
-  const [logout, { loading: loggingOut, error: logoutError }] = useAsyncFn(() =>
-    fetch(`${BOOKSTORE_HOSTNAME}/auth/logout`)
-      .then(handleResponse)
-      .then((res) => check())
+
+  const [getData, { data, loading, error }] = useAsyncFn(() =>
+    fetch(`${BOOKSTORE_HOSTNAME}/graphql`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token || ""}`,
+      },
+      body: JSON.stringify({
+        query: `query {
+          books {
+            title
+            author
+            price
+            sales
+            reports
+          }
+          me {
+            loggedIn
+            email
+            roles
+          }
+        }`,
+      }),
+    }).then(handleResponse)
   );
 
   useEffect(() => {
-    check();
+    getData();
   }, []);
 
   return (
@@ -81,19 +100,15 @@ const App = () => {
           <Column narrow>
             <Box>
               <Title>Passwordless Login</Title>
+              <Title subtitle>{sent && "Email Sent!"}</Title>
               {sendError && (
                 <Message color="danger">
                   <Message.Body>{sendError.message}</Message.Body>
                 </Message>
               )}
-              {checkingError && (
+              {error && (
                 <Message color="danger">
-                  <Message.Body>{checkingError.message}</Message.Body>
-                </Message>
-              )}
-              {logoutError && (
-                <Message color="danger">
-                  <Message.Body>{logoutError.message}</Message.Body>
+                  <Message.Body>{error.message}</Message.Body>
                 </Message>
               )}
               <Field>
@@ -108,20 +123,24 @@ const App = () => {
                 <Button onClick={submit} state={sending ? "loading" : null}>
                   Send Auth Link
                 </Button>
-
-                <Button onClick={check} state={checking ? "loading" : null}>
-                  Check Claims
-                </Button>
-
-                <Button onClick={logout} state={loggingOut ? "loading" : null}>
+                <Button
+                  onClick={() => (window.location = "/")}
+                  disabled={!access_token}
+                >
                   Logout
                 </Button>
               </Button.Group>
             </Box>
 
             <Message color="info">
-              <Message.Header>User Claims</Message.Header>
-              <Message.Body as="pre">{JSON.stringify(JSON.parse(claims), null, 2)}</Message.Body>
+              <Message.Header>GraphQL Result</Message.Header>
+              <Message.Body as="pre">
+                {loading ? (
+                  <Loader />
+                ) : (
+                  JSON.stringify(JSON.parse(data), null, 2)
+                )}
+              </Message.Body>
             </Message>
           </Column>
         </Column.Group>
