@@ -1,5 +1,4 @@
 name: api-deployment
-image: kpatel20538/bookstore-app:api-dev
 command:
 - sh
 workdir: /app

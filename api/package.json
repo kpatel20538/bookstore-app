@@ -5,11 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "publish": "npm run docker:build && npm run docker:build-dev && npm run docker:push && npm run docker:push-dev",
-    "docker:build": "sudo docker build --target prod -t kpatel20538/bookstore-app:api .",
-    "docker:build-dev": "sudo docker build --target dev -t kpatel20538/bookstore-app:api-dev .",
-    "docker:push": "sudo docker push kpatel20538/bookstore-app:api",
-    "docker:push-dev": "sudo docker push kpatel20538/bookstore-app:api-dev"
+    "dev": "nodemon src/index.js",
+    "publish": "npm run docker:build && npm run docker:push",
+    "docker:build": "sudo docker build -t kpatel20538/bookstore-app:api .",
+    "docker:push": "sudo docker push kpatel20538/bookstore-app:api"
   },
   "private": "true",
   "keywords": [],
@@ -24,5 +23,8 @@
     "cassandra-driver": "^4.5.2",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
