@@ -2,27 +2,13 @@ const Koa = require("koa");
 const Router = require("@koa/router");
 const cors = require("@koa/cors");
 const bodyParser = require("koa-bodyparser");
-const qs = require("qs");
-const { AccessControl } = require("accesscontrol");
-
-const Store = require(`./store/inmemory`);
-const jwt = require("./jwt");
-const sendMail = require("./email");
 const fetch = require("node-fetch");
+const qs = require("querystring");
+
+const jwt = require("./jwt");
 
 const app = new Koa();
 const router = new Router();
-const store = new Store();
-
-const fetchClaims = async (subject) => {
-  const claims = await store.get(subject);
-  if (!claims) {    
-    const defaultClaims = {roles: ["customer"]}
-    await store.set(subject, defaultClaims);
-    return defaultClaims;
-  }
-  return claims;
-};
 
 router.post("/auth/send", async (ctx) => {
   console.log(`SEND:EMAIL ${JSON.stringify(ctx.request.body)}`);
@@ -34,7 +20,7 @@ router.post("/auth/send", async (ctx) => {
   const href = `${process.env.HOSTNAME}/auth/verify?${qs.stringify({ token })}`;
   console.log(`SEND:HREF ${href}`);
 
-  const response = await fetch(
+  /* const response = await fetch(
     `https://api.elasticemail.com/v2/email/send?${qs.stringify({
       apikey: process.env.ELASTIC_API_KEY,
       from: process.env.STMP_FROM,
@@ -49,7 +35,7 @@ router.post("/auth/send", async (ctx) => {
 
   const info = await response.text();
 
-  console.log(`SEND:MESSAGE ${info}`);
+  console.log(`SEND:MESSAGE ${info}`); */
   ctx.body = { status: "OK" };
 });
 
@@ -59,9 +45,8 @@ router.get("/auth/verify", async (ctx) => {
     const { email: subject } = jwt.verifyOtpToken(token);
 
     console.log(`VEFIFICATION SUCCESSFUL: ${subject}`);
-    const claims = await fetchClaims(subject);
     // TODO: Replace with authenication code
-    const access_token = jwt.signAccessToken({ subject, ...claims });
+    const access_token = jwt.signAccessToken({ subject, roles: ["CUSTOMER"] });
     const uri = `${process.env.SUCCESS_REDIRECT}?${qs.stringify({
       access_token,
     })}`;

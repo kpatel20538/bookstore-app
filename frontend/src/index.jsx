@@ -76,8 +76,7 @@ const App = () => {
             title
             author
             price
-            sales
-            reports
+            owner
           }
           me {
             loggedIn
