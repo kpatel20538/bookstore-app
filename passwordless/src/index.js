@@ -20,7 +20,7 @@ router.post("/auth/send", async (ctx) => {
   const href = `${process.env.HOSTNAME}/auth/verify?${qs.stringify({ token })}`;
   console.log(`SEND:HREF ${href}`);
 
-  /* const response = await fetch(
+  const response = await fetch(
     `https://api.elasticemail.com/v2/email/send?${qs.stringify({
       apikey: process.env.ELASTIC_API_KEY,
       from: process.env.STMP_FROM,
@@ -35,7 +35,7 @@ router.post("/auth/send", async (ctx) => {
 
   const info = await response.text();
 
-  console.log(`SEND:MESSAGE ${info}`); */
+  console.log(`SEND:MESSAGE ${info}`);
   ctx.body = { status: "OK" };
 });
 
