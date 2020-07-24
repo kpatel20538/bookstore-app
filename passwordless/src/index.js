@@ -16,14 +16,8 @@ const store = new Store();
 
 const fetchClaims = async (subject) => {
   const claims = await store.get(subject);
-  if (!claims) {
-    const accessControl = new AccessControl();
-    accessControl
-      .grant("user")
-      .readAny("book")
-      .createOwn("order")
-      .deleteOwn("order");
-    const defaultClaims = accessControl.getGrants();
+  if (!claims) {    
+    const defaultClaims = {roles: ["customer"]}
     await store.set(subject, defaultClaims);
     return defaultClaims;
   }
@@ -67,7 +61,7 @@ router.get("/auth/verify", async (ctx) => {
     console.log(`VEFIFICATION SUCCESSFUL: ${subject}`);
     const claims = await fetchClaims(subject);
     // TODO: Replace with authenication code
-    const access_token = jwt.signAccessToken({ subject, claims });
+    const access_token = jwt.signAccessToken({ subject, ...claims });
     const uri = `${process.env.SUCCESS_REDIRECT}?${qs.stringify({
       access_token,
     })}`;

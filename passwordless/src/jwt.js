@@ -16,8 +16,8 @@ const verifyOtpToken = (token) => {
   });
 };
 
-const signAccessToken = ({ subject, claims }) => {
-  return jwt.sign({ email: subject, claims }, process.env.JWT_ACCESS_KEY, {
+const signAccessToken = ({ subject, ...claims }) => {
+  return jwt.sign({ email: subject, ...claims }, process.env.JWT_ACCESS_KEY, {
     issuer: process.env.JWT_ACCESS_ISS,
     audience: process.env.JWT_ACCESS_AUD,
     subject,
