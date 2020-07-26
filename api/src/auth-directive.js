@@ -1,15 +1,25 @@
 const { SchemaDirectiveVisitor } = require("apollo-server");
 const { defaultFieldResolver } = require("graphql");
 const { AccessControl } = require("accesscontrol");
+const { Glob } = require("notation");
 
-const patchResolver = (field, resolverFactory) => {
-  const { resolve = defaultFieldResolver } = field;
-  field.resolve = async function (...outerArgs) {
-    const resolver = resolverFactory((...innerArgs) =>
-      resolve.apply(this, innerArgs)
-    );
-    return resolver(...outerArgs);
-  };
+const patternMatches = (patterns, fieldName) => {
+  let accepted = false;
+  for (const pattern of Glob.normalize(patterns)) {
+    const glob = Glob.create(pattern);
+    if (glob.isNegated) {
+      accepted &= glob.test(fieldName);
+    } else {
+      accepted |= glob.test(fieldName);
+    }
+  }
+  return accepted;
+};
+
+const canAccept = ({ policy, resource, roles, action, isOwner, attribute }) => {
+  const methodName = `${action}${isOwner ? "Own" : "Any"}`;
+  const { attributes } = policy.can(roles)[methodName](resource);
+  return patternMatches(attributes, attribute);
 };
 
 class AuthDirective extends SchemaDirectiveVisitor {
@@ -22,7 +32,6 @@ class AuthDirective extends SchemaDirectiveVisitor {
   get policy() {
     if (!this._policy) {
       this._policy = new AccessControl(this._grants).lock();
-      console.log(this._policy._grants.CUSTOMER);
     }
     return this._policy;
   }
@@ -38,43 +47,20 @@ class AuthDirective extends SchemaDirectiveVisitor {
       }))
     );
 
-    Object.values(type.getFields()).forEach((field) =>
-      patchResolver(field, (resolver) => this.createAuthResolver(resolver))
-    );
-  }
-
-  canRead(claims, resource, owner, attribute, result) {
-    const isOwner = owner === claims.subject;
-
-    if (isOwner) {
-      return this.policy
-        .can(claims.roles)
-        .readOwn(resource)
-        .filter({ [attribute]: result })[attribute];
-    } else {
-      return this.policy
-        .can(claims.roles)
-        .readAny(resource)
-        .filter({ [attribute]: result })[attribute];
+    for (const field of Object.values(type.getFields())) {
+      const { resolve = defaultFieldResolver } = field;
+      field.resolve = async (parent, args, context, info) => {
+        const result = await resolve(parent, args, context, info);
+        return canAccept({
+          policy: this.policy,
+          resource: info.parentType.name,
+          roles: context.claims.roles,
+          action: "read",
+          attribute: info.fieldName,
+          isOwner: parent.owner === context.claims.subject,
+        }) ? result : null;
+      };
     }
-  }
-
-  createAuthResolver(resolver) {
-    return async (parent, args, context, info) => {
-      const result = await resolver(parent, args, context, info);
-      const isOwner = parent.owner === context.claims.subject;
-      const readOwn = this.policy
-        .can(context.claims.roles)
-        .readOwn(info.parentType.name)
-        .filter({ [info.fieldName]: result })[info.fieldName];
-      const readAny = this.policy
-        .can(context.claims.roles)
-        .readAny(info.parentType.name)
-        .filter({ [info.fieldName]: result })[info.fieldName];
-
-      console.log({ isOwner, readOwn, readAny });
-      return isOwner ? readOwn : readAny;
-    };
   }
 }
 
