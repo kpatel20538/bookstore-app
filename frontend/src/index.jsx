@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-// import App from './App';
-import static from "./static.yaml";
+import App from './App';
+/* import static from "./static.yaml";
 import {
   Box,
   Input,
@@ -14,9 +14,9 @@ import {
   Container,
   Column,
   Loader,
-} from "rbx";
+} from "rbx"; */
 import "rbx/index.css";
-
+/* 
 const useAsyncFn = (fn) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
@@ -160,5 +160,5 @@ const App = () => {
     </Section>
   );
 };
-
+ */
 ReactDOM.render(<App />, document.getElementById("root"));

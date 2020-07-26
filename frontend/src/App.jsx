@@ -1,29 +1,33 @@
-import React from "react";
+import React, {lazy, Suspense} from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { PageLoader } from "rbx";
 import Appbar from "/components/Appbar";
-import Account from "/pages/Account";
-import Home from "/pages/Home";
-import LogIn from "/pages/LogIn";
-import SignUp from "/pages/SignUp";
+
+const Account = lazy(() => import("/pages/Account"));
+const Home = lazy(() => import("/pages/Home"));
+const LogIn = lazy(() => import("/pages/LogIn"));
+const SignUp = lazy(() => import("/pages/SignUp"));
 
 const App = () => {
   return (
     <BrowserRouter>
       <Appbar />
-      <Switch>
-        <Route path="/signup">
-          <SignUp />
-        </Route>
-        <Route path="/login">
-          <LogIn />
-        </Route>
-        <Route path="/account">
-          <Account />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
+      <Suspense fallback={<PageLoader color="primary" />}>
+        <Switch>
+          <Route path="/signup">
+            <SignUp />
+          </Route>
+          <Route path="/login">
+            <LogIn />
+          </Route>
+          <Route path="/account">
+            <Account />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Suspense>
     </BrowserRouter>
   );
 };
