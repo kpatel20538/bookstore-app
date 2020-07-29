@@ -23,6 +23,10 @@ spec:
       labels:
         app: api-app
     spec:
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: cassandra-secret
       containers:
         - name: api-container
           image: kpatel20538/bookstore-app:api
@@ -35,7 +39,22 @@ spec:
             requests:
               memory: 256Mi
               cpu: 200m
+          
+          volumeMounts:
+            - name: secret-volume
+              readOnly: true
+              mountPath: "/etc/secret"
           env:
+            - name: CASSANDRA_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: cassandra-secret
+                  key: cassandra_username
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cassandra-secret
+                  key: cassandra_password
             - name: JWT_ACCESS_ALG
               valueFrom:
                 secretKeyRef:
