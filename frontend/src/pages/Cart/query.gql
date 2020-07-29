@@ -1,0 +1,14 @@
+query CartByUser($pageState: String) {
+  books(pageState: $pageState) {
+    rows {
+      book_id
+      author
+      category
+      cover
+      name
+      price
+      rating
+    }
+    pageState
+  }
+}

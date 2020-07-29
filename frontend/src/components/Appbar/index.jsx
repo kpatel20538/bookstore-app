@@ -19,6 +19,9 @@ const Appbar = () => {
           <Navbar.Item onClick={() => history.push("/")}>
             {static.pages.home}
           </Navbar.Item>
+          <Navbar.Item onClick={() => history.push("/books")}>
+            {static.pages.bookList}
+          </Navbar.Item>
         </Navbar.Segment>
 
         <Navbar.Segment align="end">

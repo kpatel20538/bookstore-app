@@ -12,15 +12,10 @@ const client = new Client({
 
 client.connect();
 
-const toConnection = async (results, {offset, limit}) => {
-  const items = [];
-  for await (const item of results) {
-    items.push(item);
-  }
-  
+const toConnection = async (results) => {  
   return {
-    items: items.slice(offset, offset + limit),
-    offset: offset + limit < items.length ? offset + limit : null,
+    rows: results.rows,
+    pageState: results.pageState,
   };
 };
 
@@ -57,37 +52,43 @@ const selectBook = async ({ book_id }) => {
   console.log("selectBook", item);
   return item;
 };
-const selectBooks = async ({ offset = 0, limit = 10 }) => {
-  console.log("selectBooks", { offset, limit });
+const selectBooks = async ({ pageState, fetchSize = 10 }) => {
+  console.log("selectBooks", { pageState, fetchSize });
   const query = "SELECT * FROM bookstore.books_by_id;";
-  const results = await client.execute(query);
+  const results = await client.execute(query, [], { autoPage: false, pageState, fetchSize });
 
-  const connection = await toConnection(results, { offset, limit })
-  console.log("selectBooks", connection);
+  const connection = await toConnection(results)
+  console.log("selectBooks", connection.rows[0]);
   return connection;
 };
-const selectBooksByCategory = async ({ category, offset = 0, limit = 10 }) => {
-  console.log("selectBooksByCategory", { category, offset, limit });
+const selectBooksByCategory = async ({ category, pageState, fetchSize = 10 }) => {
+  console.log("selectBooksByCategory", { category, pageState, fetchSize });
   const query =
     "SELECT * FROM bookstore.books_by_category WHERE category=?;";
   const results = await client.execute(query, [category], {
     prepare: true,
+    autoPage: false,
+    pageState,
+    fetchSize,
   });
 
-  const connection = await toConnection(results, { offset, limit })
-  console.log("selectBooksByCategory", connection);
+  const connection = await toConnection(results)
+  console.log("selectBooksByCategory", connection.rows[0]);
   return connection;
 };
-const selectCart = async ({ customer_id, offset = 0, limit = 10 }) => {
-  console.log("selectCart", { customer_id, offset, limit });
+const selectCart = async ({ customer_id, pageState, fetchSize = 10 }) => {
+  console.log("selectCart", { customer_id, pageState, fetchSize });
   const query =
     "SELECT * FROM bookstore.carts_by_customer WHERE customer_id=?;";
   const results = await client.execute(query, [customer_id], {
     prepare: true,
+    autoPage: false,
+    pageState,
+    fetchSize,
   });
 
-  const connection = await toConnection(results, { offset, limit });
-  console.log("selectCart", connection);
+  const connection = await toConnection(results);
+  console.log("selectCart", connection.rows[0]);
   return connection;
 };
 const selectCartItem = async ({ customer_id, book_id }) => {
@@ -114,16 +115,19 @@ const selectOrder = async ({ customer_id, order_id }) => {
   console.log("selectOrder", item);
   return item;
 };
-const selectOrders = async ({ customer_id, offset = 0, limit = 10 }) => {
-  console.log("selectOrders", { customer_id, offset, limit });
+const selectOrders = async ({ customer_id, pageState, fetchSize = 10 }) => {
+  console.log("selectOrders", { customer_id, pageState, fetchSize });
   const query =
     "SELECT * FROM bookstore.orders_by_customer WHERE customer_id=?;";
   const results = await client.execute(query, [customer_id], {
     prepare: true,
+    autoPage: false,
+    pageState,
+    fetchSize,
   });
 
-  const connection = await toConnection(results, { offset, limit });
-  console.log("selectOrders", connection);
+  const connection = await toConnection(results);
+  console.log("selectOrders", connection.rows[0]);
   return connection;
 };
 const updateCartItem = async ({ customer_id, book_id, quantity }) => {

@@ -4,6 +4,7 @@ logo:
 
 pages:
   home: Home
+  bookList: Books
   signUp: Sign Up
   logIn: Log In
   account: My Account

@@ -58,6 +58,23 @@ router.get("/auth/verify", async (ctx) => {
   }
 });
 
+router.post("/auth/debug", async (ctx) => {
+  try {
+    const { email: subject } = ctx.request.body;
+
+    console.log(`debug: ${subject}`);
+    const access_token = jwt.signAccessToken({ subject, roles: ["CUSTOMER"] });
+    const uri = `${process.env.SUCCESS_REDIRECT}?${qs.stringify({
+      access_token,
+    })}`;
+    console.log(uri);
+    ctx.body = { access_token };
+  } catch (err) {
+    console.error(err);
+    ctx.body = { err: err.message };
+  }
+});
+
 app.use(cors());
 app.use(bodyParser());
 app.use(router.routes());

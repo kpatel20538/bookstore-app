@@ -61,8 +61,8 @@ const typeDefs = gql`
   }
 
   type BookConnection {
-    items: [Book]
-    offset: Int
+    rows: [Book]
+    pageState: String
   }
 
   type BookDetail {
@@ -78,8 +78,8 @@ const typeDefs = gql`
   }
 
   type OrderConnection {
-    items: [Order]
-    offset: Int
+    rows: [Order]
+    pageState: String
   }
 
   type CartItem {
@@ -89,8 +89,8 @@ const typeDefs = gql`
   }
 
   type CartConnection {
-    items: [CartItem]
-    offset: Int
+    rows: [CartItem]
+    pageState: String
   }
 
   type User {
@@ -101,10 +101,10 @@ const typeDefs = gql`
   }
 
   type Query {
-    books(category: String, offset: Int, limit: Int): BookConnection
+    books(category: String, pageState: String, fetchSize: Int): BookConnection
     book(book_id: ID!): Book
-    cart(offset: Int, limit: Int): CartConnection
-    orders(offset: Int, limit: Int): OrderConnection
+    cart(pageState: String, fetchSize: Int): CartConnection
+    orders(pageState: String, fetchSize: Int): OrderConnection
     order(order_id: ID!): Order
     me: User
   }

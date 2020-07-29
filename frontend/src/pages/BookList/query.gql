@@ -1,0 +1,14 @@
+query BooksByCategory($category: String, $pageState: String) {
+  books(category: $category, pageState: $pageState, fetchSize: 100) {
+    rows {
+      book_id
+      author
+      category
+      cover
+      name
+      price
+      rating
+    }
+    pageState
+  }
+}
