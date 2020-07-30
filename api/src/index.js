@@ -15,6 +15,7 @@ const {
   selectOrders,
   updateCartItem,
 } = require("./cassandra-datasource");
+const { searchBooks } = require("./elasticsearch-datasoruce");
 const jwt = require("./jwt");
 
 /* type Book
@@ -100,8 +101,22 @@ const typeDefs = gql`
     subject: String
   }
 
+  scalar Key
+  type Bucket {
+    key: Key
+    doc_count: Int
+  }
+
+  type BookSearch {
+    results: [Book]
+    price_ranges: [Bucket]
+    rating_ranges: [Bucket]
+    categories: [Bucket]
+  }
+
   type Query {
     books(category: String, pageState: String, fetchSize: Int): BookConnection
+    search(query: String, category: String): BookSearch
     book(book_id: ID!): Book
     cart(pageState: String, fetchSize: Int): CartConnection
     orders(pageState: String, fetchSize: Int): OrderConnection
@@ -151,6 +166,9 @@ const resolvers = {
         customer_id: context.claims.subject,
         order_id: args.order_id,
       });
+    },
+    search: (parent, args, context, info) => {
+      return searchBooks(args);
     },
     me: (parent, args, context, info) => {
       return context.claims;

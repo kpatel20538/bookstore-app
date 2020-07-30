@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: bookstore-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/app-root: /static/index.html
 spec:
   rules:
   - host: bookstore-kpatel20538.cloud.okteto.net
@@ -11,11 +13,11 @@ spec:
         backend:
           serviceName: passwordless-service
           servicePort: 8080
-      - path: /static
-        backend:
-          serviceName: minio
-          servicePort: 9000
       - path: /graphql
         backend:
           serviceName: api-service
           servicePort: 8080
+      - path: /static
+        backend:
+          serviceName: minio
+          servicePort: 9000

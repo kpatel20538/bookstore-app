@@ -5,9 +5,9 @@ import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 
 const Ratings = ({ rating }) => {
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: "inline-flex" }}>
       {[1, 2, 3, 4, 5].map((breakpoint) => (
-        <div style={{marginLeft: '5px', marginRight: '5px'}} key={breakpoint}>
+        <div style={{ marginLeft: "5px", marginRight: "5px" }} key={breakpoint}>
           {breakpoint < rating ? (
             <FaStar />
           ) : breakpoint < rating + 0.5 ? (

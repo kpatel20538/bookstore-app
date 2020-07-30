@@ -1,6 +1,7 @@
-query BooksByCategory($category: String, $pageState: String) {
-  books(category: $category, pageState: $pageState, fetchSize: 100) {
-    rows {
+
+query SearchBooks($query: String) {
+  search(query: $query) {
+    results {
       book_id
       author
       category
@@ -9,6 +10,17 @@ query BooksByCategory($category: String, $pageState: String) {
       price
       rating
     }
-    pageState
+    price_ranges {
+      key
+      doc_count
+    }
+    categories {
+      key
+      doc_count
+    }
+    rating_ranges {
+      key
+      doc_count
+    }
   }
 }
