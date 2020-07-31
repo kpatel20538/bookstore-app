@@ -16,6 +16,11 @@ const {
   updateCartItem,
 } = require("./cassandra-datasource");
 const { searchBooks } = require("./elasticsearch-datasoruce");
+const {
+  getBooksFromAuthor,
+  getBooksFromCustomersOfAuthor,
+  getPersonalBooks,
+} = require("./neo4j-datasource");
 const jwt = require("./jwt");
 
 /* type Book
@@ -59,6 +64,8 @@ const typeDefs = gql`
     name: String
     price: Int
     rating: Float
+    recommendationsFromAuthor: [Book]
+    recommendationsFromCustomers: [Book]
   }
 
   type BookConnection {
@@ -122,6 +129,7 @@ const typeDefs = gql`
     orders(pageState: String, fetchSize: Int): OrderConnection
     order(order_id: ID!): Order
     me: User
+    recommendationsFromPurchases(email: String!): [Book]
   }
 
   input CartItemInput {
@@ -172,6 +180,17 @@ const resolvers = {
     },
     me: (parent, args, context, info) => {
       return context.claims;
+    },
+    recommendationsFromPurchases: (parent, args, context, info) => {
+      return getPersonalBooks(args);
+    },
+  },
+  Book: {
+    recommendationsFromAuthor: (parent, args, context, info) => {
+      return getBooksFromAuthor(parent);
+    },
+    recommendationsFromCustomers: (parent, args, context, info) => {
+      return getBooksFromCustomersOfAuthor(parent);
     },
   },
   BookDetail: {

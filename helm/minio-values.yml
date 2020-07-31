@@ -1,0 +1,18 @@
+minio:
+  mode: standalone
+  accessKey: ""
+  secretKey: ""
+  replicas: 1
+  persistence:
+    size: 512Mi
+
+  defaultBucket:
+    enabled: true
+    name: static
+    policy: download
+    purge: false
+
+  resources:
+    limits:
+      memory: 256Mi
+      cpu: 500m

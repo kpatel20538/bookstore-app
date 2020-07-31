@@ -7,5 +7,20 @@ query BookById($book_id: ID!) {
     name
     price
     rating
+    recommendationsFromAuthor {
+      book_id
+      name
+      cover
+    }
+    recommendationsFromCustomers {
+      book_id
+      name
+      cover
+    }
+  }
+  recommendationsFromPurchases(email: "demi@bookstore.com") {
+    book_id
+    name
+    cover
   }
 }
