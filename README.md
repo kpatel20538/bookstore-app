@@ -10,7 +10,7 @@ https://aws.amazon.com/blogs/database/building-a-modern-application-with-purpose
 
 - [x] SPA Frontend w/ Minio
 - [x] GraphQL API w/ Apollo
-- [ ] Users w/ ~~GoTrue~~ Passwordless
+- [x] Users w/ ~~GoTrue~~ Passwordless
 - [x] Catalog, Cart, Orders w/ Cassandra
 - [ ] Rakings w/ Redis
 - [x] Search w/ ElasticSearch
