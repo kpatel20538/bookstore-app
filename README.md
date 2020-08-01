@@ -8,20 +8,20 @@ https://aws.amazon.com/blogs/database/building-a-modern-application-with-purpose
 
 ### Primary Goals 
 
-[~] SPA Frontend w/ Minio
-[ ] GraphQL API w/ Apollo
-[ ] Users w/ GoTrue
-[ ] Catalog, Cart, Orders w/ Cassandra
-[ ] Rakings w/ Redis
-[ ] Search w/ ElasticSearch
-[ ] Recommendations w/ Neo4j
+- [x] SPA Frontend w/ Minio
+- [x] GraphQL API w/ Apollo
+- [ ] Users w/ ~~GoTrue~~ Passwordless
+- [x] Catalog, Cart, Orders w/ Cassandra
+- [ ] Rakings w/ Redis
+- [x] Search w/ ElasticSearch
+- [x] Recommendations w/ Neo4j
 
 ### Stretch Goals 
 
-[ ] Server Provision, Secrets w/ Terraform
-[ ] Service Traffic Control, Auth, Reporting  w/ Istio
-[ ] CI/CD w/ Github Actions 
-[ ] Eventing  w/ Kafka
+- [ ] Server Provision, Secrets w/ Terraform
+- [ ] Service Traffic Control, Auth, Reporting  w/ Istio
+- [ ] CI/CD w/ Github Actions 
+- [ ] Eventing  w/ Kafka
 
 
 ## Accounts
