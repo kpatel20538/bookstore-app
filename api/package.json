@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "publish": "npm run docker:build && npm run docker:push",
-    "docker:build": "sudo docker build -t kpatel20538/bookstore-app:api .",
-    "docker:push": "sudo docker push kpatel20538/bookstore-app:api"
+    "start": "NODE_ENV=production node src/index.js",
+    "dev": "NODE_ENV=development nodemon src/index.js",
+    "lint": "eslint src",
+    "up": "npm run docker:build && npm run docker:push && npm run k8s:deploy",
+    "docker:build": "sudo docker build --target prod -t kpatel20538/bookstore-app:api . && sudo docker build --target dev -t kpatel20538/bookstore-app:api-dev .",
+    "docker:push": "sudo docker push kpatel20538/bookstore-app:api && sudo docker push kpatel20538/bookstore-app:api-dev",
+    "k8s:deploy": "kubectl apply -f ../k8s/api-service.yml --wait && kubectl rollout restart deployment api-deployment"
   },
   "private": "true",
   "keywords": [],
@@ -31,6 +33,13 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-node": "^11.1.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5"
+  },
+  "engines": {
+    "node": ">=12.18.0"
   }
 }

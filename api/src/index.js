@@ -147,64 +147,64 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    books: (parent, args, context, info) => {
+    books: (parent, args) => {
       if (args.category) {
         return selectBooksByCategory(args);
-      } else {
-        return selectBooks(args);
       }
+      return selectBooks(args);
     },
-    book: (parent, args, context, info) => {
+    book: (parent, args) => {
       return selectBook(args);
     },
-    cart: (parent, args, context, info) => {
+    cart: (parent, args, context) => {
       return selectCart({
         customer_id: context.claims.subject,
         ...args,
       });
     },
-    orders: async (parent, args, context, info) => {
+    orders: async (parent, args, context) => {
       return selectOrders({
         customer_id: context.claims.subject,
         ...args,
       });
     },
-    order: (parent, args, context, info) => {
+    order: (parent, args, context) => {
       return selectOrder({
         customer_id: context.claims.subject,
         order_id: args.order_id,
       });
     },
-    search: (parent, args, context, info) => {
+    search: (parent, args) => {
       return searchBooks(args);
     },
-    me: (parent, args, context, info) => {
+    me: (parent, args, context) => {
       return context.claims;
     },
-    recommendationsFromPurchases: (parent, args, context, info) => {
+    recommendationsFromPurchases: (parent, args) => {
       return getPersonalBooks(args);
     },
   },
   Book: {
-    recommendationsFromAuthor: (parent, args, context, info) => {
+    recommendationsFromAuthor: (parent) => {
       return getBooksFromAuthor(parent);
     },
-    recommendationsFromCustomers: (parent, args, context, info) => {
+    recommendationsFromCustomers: (parent) => {
       return getBooksFromCustomersOfAuthor(parent);
     },
   },
   BookDetail: {
-    book: (parent, args, context, info) => {
+    book: (parent) => {
       return selectBook(parent);
     },
   },
   CartItem: {
-    book: (parent, args, context, info) => {
+    book: (parent) => {
       return selectBook(parent);
     },
   },
   Mutation: {
-    addToCart: async (parent, args, context, info) => {
+    addToCart: async (parent, args, context) => {
+      const book = selectBook({ book_id: args.input.book_id });
       await insertCartItem({
         customer_id: context.claims.subject,
         book_id: args.input.book_id,
@@ -217,7 +217,7 @@ const resolvers = {
         quantity: args.input.quantity || 1,
       };
     },
-    removeFromCart: async ({ parent, args, context, info }) => {
+    removeFromCart: async (parent, args, context) => {
       const cartItem = selectCartItem({
         customer_id: context.claims.subject,
         book_id: args.book_id,
@@ -232,7 +232,7 @@ const resolvers = {
         quantity: cartItem.quantity || 1,
       };
     },
-    updateCartItem: async (parent, args, context, info) => {
+    updateCartItem: async (parent, args, context) => {
       const cartItem = selectCartItem({
         customer_id: context.claims.subject,
         book_id: args.book_id,
@@ -240,7 +240,7 @@ const resolvers = {
       await updateCartItem({
         customer_id: context.claims.subject,
         book_id: args.input.book_id,
-        price: book.price,
+        price: cartItem.price,
         quantity: args.input.quantity || 1,
       });
       return {
@@ -249,7 +249,7 @@ const resolvers = {
         quantity: args.input.quantity || 1,
       };
     },
-    checkout: async (parent, args, context, info) => {
+    checkout: async (parent, args, context) => {
       const cart = await selectCart({
         customer_id: context.claims.subject,
       });

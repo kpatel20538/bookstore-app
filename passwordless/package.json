@@ -1,14 +1,22 @@
 {
   "name": "passwordless",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.0.2",
+  "description": "Password Auth API",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/kpatel20538/bookstore-app.git",
+    "directory": "passwordless"
+  },
+  "main": "src/index.js",
+  "private": "true",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "publish": "npm run docker:build && npm run docker:push",
-    "docker:build": "sudo docker build -t kpatel20538/bookstore-app:passwordless .",
-    "docker:push": "sudo docker push kpatel20538/bookstore-app:passwordless"
+    "lint": "eslint src",
+    "up": "npm run docker:build && npm run docker:push && npm run k8s:deploy",
+    "docker:build": "sudo docker build --target prod -t kpatel20538/bookstore-app:passwordless . && sudo docker build --target dev -t kpatel20538/bookstore-app:passwordless-dev .",
+    "docker:push": "sudo docker push kpatel20538/bookstore-app:passwordless && sudo docker push kpatel20538/bookstore-app:passwordless-dev",
+    "k8s:deploy": "kubectl apply -f ../k8s/passwordless-service.yml --wait && kubectl rollout restart deployment passwordless-deployment"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +30,11 @@
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "eslint": "^7.6.0",
+    "nodemon": "^2.0.4",
+    "eslint-plugin-node": "^11.1.0"
+  },
+  "engines": {
+    "node": ">=12.18.0"
   }
 }

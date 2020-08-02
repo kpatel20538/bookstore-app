@@ -30,19 +30,17 @@ const BookCard = ({ book, inCart, quantity, price }) => {
         </Media.Item>
         <Media.Item align="content">
           <Content>
-            <p>
-              <strong>{book.name}</strong>
-              <br />
-              <small>By: {book.author}</small>
-              <br />
-              <small>${(price || book.price) / 100}</small>
-              <br />
-              {quantity ? (
-                <small>Quantity: {quantity}</small>
-              ) : (
-                <Ratings rating={book.rating} />
-              )}
-            </p>
+            <strong>{book.name}</strong>
+            <br />
+            <small>By: {book.author}</small>
+            <br />
+            <small>${(price || book.price) / 100}</small>
+            <br />
+            {quantity ? (
+              <small>Quantity: {quantity}</small>
+            ) : (
+              <Ratings rating={book.rating} />
+            )}
           </Content>
           <Tag
             as="a"

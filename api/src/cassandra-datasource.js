@@ -12,6 +12,8 @@ const client = new Client({
 
 client.connect();
 
+const PAGE_SIZE = 10;
+
 const toConnection = async (results) => {  
   return {
     rows: results.rows,
@@ -52,19 +54,26 @@ const selectBook = async ({ book_id }) => {
   console.log("selectBook", item);
   return item;
 };
-const selectBooks = async ({ pageState, fetchSize = 10 }) => {
+const selectBooks = async ({ pageState, fetchSize = PAGE_SIZE }) => {
   console.log("selectBooks", { pageState, fetchSize });
   const query = "SELECT * FROM bookstore.books_by_id;";
-  const results = await client.execute(query, [], { autoPage: false, pageState, fetchSize });
+  const results = await client.execute(query, [], {
+    autoPage: false,
+    pageState,
+    fetchSize,
+  });
 
-  const connection = await toConnection(results)
+  const connection = await toConnection(results);
   console.log("selectBooks", connection.rows[0]);
   return connection;
 };
-const selectBooksByCategory = async ({ category, pageState, fetchSize = 10 }) => {
+const selectBooksByCategory = async ({
+  category,
+  pageState,
+  fetchSize = PAGE_SIZE,
+}) => {
   console.log("selectBooksByCategory", { category, pageState, fetchSize });
-  const query =
-    "SELECT * FROM bookstore.books_by_category WHERE category=?;";
+  const query = "SELECT * FROM bookstore.books_by_category WHERE category=?;";
   const results = await client.execute(query, [category], {
     prepare: true,
     autoPage: false,
@@ -72,11 +81,15 @@ const selectBooksByCategory = async ({ category, pageState, fetchSize = 10 }) =>
     fetchSize,
   });
 
-  const connection = await toConnection(results)
+  const connection = await toConnection(results);
   console.log("selectBooksByCategory", connection.rows[0]);
   return connection;
 };
-const selectCart = async ({ customer_id, pageState, fetchSize = 10 }) => {
+const selectCart = async ({
+  customer_id,
+  pageState,
+  fetchSize = PAGE_SIZE,
+}) => {
   console.log("selectCart", { customer_id, pageState, fetchSize });
   const query =
     "SELECT * FROM bookstore.carts_by_customer WHERE customer_id=?;";
@@ -115,7 +128,11 @@ const selectOrder = async ({ customer_id, order_id }) => {
   console.log("selectOrder", item);
   return item;
 };
-const selectOrders = async ({ customer_id, pageState, fetchSize = 10 }) => {
+const selectOrders = async ({
+  customer_id,
+  pageState,
+  fetchSize = PAGE_SIZE,
+}) => {
   console.log("selectOrders", { customer_id, pageState, fetchSize });
   const query =
     "SELECT * FROM bookstore.orders_by_customer WHERE customer_id=?;";

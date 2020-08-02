@@ -32,13 +32,12 @@ const App = () => {
             <Route path="/book/:id">
               <Book />
             </Route>
-
             <Route path="/books/:category">
               <BookList />
             </Route>
-            {/* <Route path="/books">
+            <Route path="/books">
               <BookList />
-            </Route> */}
+            </Route>
             <Route path="/account">
               <Account />
             </Route>

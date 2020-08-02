@@ -1,11 +1,10 @@
 name: api-deployment
-command:
-- sh
+image: kpatel20538/bookstore-app:api-dev
 workdir: /app
 forward:
 - 9229:9229
 - 8080:8080
 resources:
   limits:
-    cpu: "1"
-    memory: 2Gi
+    cpu: 500m
+    memory: 1Gi

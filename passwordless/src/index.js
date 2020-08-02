@@ -45,7 +45,6 @@ router.get("/auth/verify", async (ctx) => {
     const { email: subject } = jwt.verifyOtpToken(token);
 
     console.log(`VEFIFICATION SUCCESSFUL: ${subject}`);
-    // TODO: Replace with authenication code
     const access_token = jwt.signAccessToken({ subject, roles: ["CUSTOMER"] });
     const uri = `${process.env.SUCCESS_REDIRECT}?${qs.stringify({
       access_token,
@@ -75,8 +74,9 @@ router.post("/auth/debug", async (ctx) => {
   }
 });
 
+const PORT = 8080;
 app.use(cors());
 app.use(bodyParser());
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.listen(8080);
+app.listen(PORT);
