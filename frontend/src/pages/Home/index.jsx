@@ -1,7 +1,7 @@
 import React from "react";
 import { Hero, Title } from "rbx";
 
-import Ratings from "../components/Ratings";
+import Ratings from "../../components/Ratings";
 
 const Home = () => {
   return (

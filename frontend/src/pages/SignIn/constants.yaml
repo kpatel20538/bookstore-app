@@ -1,0 +1,10 @@
+actions:
+  signIn: Send Access Link
+labels:
+  email: Email
+placeholders:
+  email: Enter your email here...
+
+services:
+  auth: "https://bookstore-kpatel20538.cloud.okteto.net/auth/debug"
+    

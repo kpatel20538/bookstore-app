@@ -28,7 +28,7 @@ const Recommendations = ({ title, books }) => {
   ) : null;
 };
 
-const BookList = () => {
+const Book = () => {
   const params = useParams();
 
   const { data } = useQuery(gql(BOOK_BY_ID), {
@@ -60,4 +60,4 @@ const BookList = () => {
   );
 };
 
-export default BookList;
+export default Book;

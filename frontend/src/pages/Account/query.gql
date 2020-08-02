@@ -1,0 +1,8 @@
+query GetSignedInUser {
+  me {
+    logged_in
+    roles
+    email
+    subject  
+  }
+}

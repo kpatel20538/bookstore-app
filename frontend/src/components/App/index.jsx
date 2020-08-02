@@ -1,56 +1,45 @@
-import React, {lazy, Suspense} from "react";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { PageLoader } from "rbx";
 
 import Appbar from "../Appbar";
 
-import constants from "./constants.yaml";
+import AuthApiProvider from "../AuthApiProvider";
 
-const Account = lazy(() => import("/pages/Account"));
-const Home = lazy(() => import("/pages/Home"));
-const LogIn = lazy(() => import("/pages/LogIn"));
-const SignUp = lazy(() => import("/pages/SignUp"));
-const Book = lazy(() => import("/pages/Book"));
-const BookList = lazy(() => import("/pages/BookList"));
-
-const client = new ApolloClient({
-  uri: constants.apollo.uri,
-  cache: new InMemoryCache(),
-});
+const Account = lazy(() => import("../../pages/Account"));
+const BestSellers = lazy(() => import("../../pages/BestSellers"));
+const Book = lazy(() => import("../../pages/Book"));
+const Cart = lazy(() => import("../../pages/Cart"));
+const Category = lazy(() => import("../../pages/Category"));
+const Checkout = lazy(() => import("../../pages/Checkout"));
+const Home = lazy(() => import("../../pages/Home"));
+const NotFound = lazy(() => import("../../pages/NotFound"));
+const Orders = lazy(() => import("../../pages/Orders"));
+const Search = lazy(() => import("../../pages/Search"));
+const SignIn = lazy(() => import("../../pages/SignIn"));
 
 const App = () => {
   return (
-    <ApolloProvider client={client}>
+    <AuthApiProvider>
       <BrowserRouter>
         <Appbar />
         <Suspense fallback={<PageLoader color="primary" />}>
           <Switch>
-            <Route path="/signup">
-              <SignUp />
-            </Route>
-            <Route path="/login">
-              <LogIn />
-            </Route>
-            <Route path="/book/:id">
-              <Book />
-            </Route>
-            <Route path="/books/:category">
-              <BookList />
-            </Route>
-            <Route path="/books">
-              <BookList />
-            </Route>
-            <Route path="/account">
-              <Account />
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
+            <Route path="/account" component={Account} />
+            <Route path="/best-sellers" component={BestSellers} />
+            <Route path="/book/:id" component={Book} />
+            <Route path="/cart" component={Cart} />
+            <Route path="/category/:name" component={Category} />
+            <Route path="/checkout" component={Checkout} />
+            <Route path="/orders" component={Orders} />
+            <Route path="/search" component={Search} />
+            <Route path="/sign-in" component={SignIn} />
+            <Route path="/" exact component={Home} />
+            <Route path="*" component={NotFound} />
           </Switch>
         </Suspense>
       </BrowserRouter>
-    </ApolloProvider>
+    </AuthApiProvider>
   );
 };
 

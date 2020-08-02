@@ -6,7 +6,7 @@ import { useQuery, gql } from "@apollo/client";
 import BookCard from "/components/BookCard";
 import CART_BY_USER from "./query.gql";
 
-const BookList = () => {
+const Cart = () => {
   const params = useParams();
   const { data } = useQuery(gql(CART_BY_USER), {
     fetchPolicy: "cache-and-network",
@@ -41,4 +41,4 @@ const BookList = () => {
   );
 };
 
-export default BookList;
+export default Cart;
