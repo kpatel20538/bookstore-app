@@ -2,7 +2,10 @@ import React, {lazy, Suspense} from "react";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { PageLoader } from "rbx";
-import Appbar from "/components/Appbar";
+
+import Appbar from "../Appbar";
+
+import constants from "./constants.yaml";
 
 const Account = lazy(() => import("/pages/Account"));
 const Home = lazy(() => import("/pages/Home"));
@@ -12,7 +15,7 @@ const Book = lazy(() => import("/pages/Book"));
 const BookList = lazy(() => import("/pages/BookList"));
 
 const client = new ApolloClient({
-  uri: "https://bookstore-kpatel20538.cloud.okteto.net/graphql",
+  uri: constants.apollo.uri,
   cache: new InMemoryCache(),
 });
 
@@ -42,7 +45,7 @@ const App = () => {
               <Account />
             </Route>
             <Route path="/">
-              <BookList />
+              <Home />
             </Route>
           </Switch>
         </Suspense>

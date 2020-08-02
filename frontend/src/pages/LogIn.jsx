@@ -35,15 +35,14 @@ const LogIn = () => {
               <Field>
                 <Label>Password</Label>
                 <Control>
-                  <Input
-                    type="password"
-                    placeholder="Enter Password Here..."
-                  />
+                  <Input type="password" placeholder="Enter Password Here..." />
                 </Control>
               </Field>
               <Field kind="group" align="right">
                 <Control>
-                  <Button color="primary">Log In</Button>
+                  <Button color="primary" onClick={onSumbit}>
+                    Log In
+                  </Button>
                 </Control>
               </Field>
               <Block textColor="danger">{"Example"}</Block>

@@ -1,20 +1,31 @@
 import React from "react";
-
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 
+import { range } from "../../helpers/array";
+import styles from "./styles.module.scss";
+
+const RATINGS_MAX = 5;
 
 const Ratings = ({ rating }) => {
+  const starCount = Math.floor(rating);
+  const showHalfStar = starCount < Math.round(rating);
+  const emptyStarCount = RATINGS_MAX - starCount - showHalfStar;
+
   return (
-    <div style={{ display: "inline-flex" }}>
-      {[1, 2, 3, 4, 5].map((breakpoint) => (
-        <div style={{ marginLeft: "5px", marginRight: "5px" }} key={breakpoint}>
-          {breakpoint < rating ? (
-            <FaStar />
-          ) : breakpoint < rating + 0.5 ? (
-            <FaStarHalfAlt />
-          ) : (
-            <FaRegStar />
-          )}
+    <div className={styles.ratings}>
+      {range(starCount).map((key) => (
+        <div className={styles.star} key={key}>
+          <FaStar />
+        </div>
+      ))}
+      {showHalfStar && (
+        <div className={styles.star} key={starCount}>
+          <FaStarHalfAlt />
+        </div>
+      )}
+      {range(emptyStarCount).map((key) => (
+        <div className={styles.star} key={key + starCount + showHalfStar}>
+          <FaRegStar />
         </div>
       ))}
     </div>

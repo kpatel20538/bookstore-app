@@ -1,19 +1,10 @@
 import React from "react";
-import {
-  Button,
-  Media,
-  Image,
-  Content,
-  Level,
-  Icon,
-  Delete,
-  Box,
-  Tag,
-} from "rbx";
+import { Button, Media, Image, Content, Box, Tag } from "rbx";
 import { useHistory } from "react-router-dom";
 import { FaCartPlus, FaTimes } from "react-icons/fa";
 
-import Ratings from "/components/Ratings";
+import Ratings from "../Ratings";
+import { formatPrice } from "../../helpers/format";
 
 const BookCard = ({ book, inCart, quantity, price }) => {
   const history = useHistory();
@@ -34,7 +25,7 @@ const BookCard = ({ book, inCart, quantity, price }) => {
             <br />
             <small>By: {book.author}</small>
             <br />
-            <small>${(price || book.price) / 100}</small>
+            <small>{formatPrice(price || book.price)}</small>
             <br />
             {quantity ? (
               <small>Quantity: {quantity}</small>

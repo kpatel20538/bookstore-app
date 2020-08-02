@@ -16,8 +16,10 @@ import {
 import { useParams, useHistory } from "react-router";
 import { useQuery, gql } from "@apollo/client";
 
-import Ratings from "/components/Ratings";
-import BookCard from "/components/BookCard";
+import Ratings from "../../components/Ratings";
+import BookCard from "../../components/BookCard";
+import { formatPrice } from "../../helpers/format";
+
 import SEARCH_BY_BOOKS from "./query.gql";
 
 const BookList = () => {
@@ -52,7 +54,7 @@ const BookList = () => {
                   {data &&
                     data.search.rating_ranges.map(({ key, doc_count }) => (
                       <Menu.List.Item key={key}>
-                        <Ratings rating={key + 1.5} />:{" "}
+                        <Ratings rating={key + 1} />:{" "}
                         <strong>{doc_count}</strong>
                       </Menu.List.Item>
                     ))}
@@ -86,7 +88,8 @@ const BookList = () => {
                   {data &&
                     data.search.price_ranges.map(({ key, doc_count }) => (
                       <Menu.List.Item key={key}>
-                        Less than ${key / 100}:<strong>{doc_count}</strong>
+                        Less than {formatPrice(key)}:
+                        <strong>{doc_count}</strong>
                       </Menu.List.Item>
                     ))}
                 </Menu.List>

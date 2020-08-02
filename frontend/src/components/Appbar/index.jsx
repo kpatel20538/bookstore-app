@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Button } from "rbx";
 import { useHistory } from "react-router-dom";
-import static from "./static.yaml";
+import constants from "./constants.yaml";
 
 const Appbar = () => {
   const history = useHistory();
@@ -10,17 +10,17 @@ const Appbar = () => {
     <Navbar>
       <Navbar.Brand>
         <Navbar.Item onClick={() => history.push("/")}>
-          <img {...static.logo} role="presentation" width="112" height="28" />
+          <img {...constants.logo} role="presentation" width="112" height="28" />
         </Navbar.Item>
         <Navbar.Burger />
       </Navbar.Brand>
       <Navbar.Menu>
         <Navbar.Segment align="start">
           <Navbar.Item onClick={() => history.push("/")}>
-            {static.pages.home}
+            {constants.pages.home}
           </Navbar.Item>
           <Navbar.Item onClick={() => history.push("/books")}>
-            {static.pages.bookList}
+            {constants.pages.bookList}
           </Navbar.Item>
         </Navbar.Segment>
 
@@ -28,13 +28,13 @@ const Appbar = () => {
           <Navbar.Item>
             <Button.Group>
               <Button color="primary" onClick={() => history.push("/signup")}>
-                <strong>{static.pages.signUp}</strong>
+                <strong>{constants.pages.signUp}</strong>
               </Button>
               <Button color="light" onClick={() => history.push("/login")}>
-                {static.pages.logIn}
+                {constants.pages.logIn}
               </Button>
               <Button color="primary" onClick={() => history.push("/account")}>
-                <strong>{static.pages.account}</strong>
+                <strong>{constants.pages.account}</strong>
               </Button>
             </Button.Group>
           </Navbar.Item>

@@ -1,9 +1,9 @@
 import React from "react";
-import { Hero, Title, Section, Container, Column, Block, Box, Image } from "rbx";
+import { Hero, Title, Column, Block, Box, Image } from "rbx";
 import { useParams, useHistory } from "react-router";
 import { useQuery, gql } from "@apollo/client";
 
-import BookCard from "/components/BookCard";
+import BookCard from "../../components/BookCard";
 import BOOK_BY_ID from "./query.gql";
 
 const Recommendations = ({ title, books }) => {

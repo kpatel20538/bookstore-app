@@ -35,10 +35,7 @@ const SignUp = () => {
               <Field>
                 <Label>Password</Label>
                 <Control>
-                  <Input
-                    type="password"
-                    placeholder="Enter Password Here..."
-                  />
+                  <Input type="password" placeholder="Enter Password Here..." />
                 </Control>
               </Field>
               <Field>
@@ -52,7 +49,9 @@ const SignUp = () => {
               </Field>
               <Field kind="group" align="right">
                 <Control>
-                  <Button color="primary">Sign Up</Button>
+                  <Button color="primary" onClick={onSumbit}>
+                    Sign Up
+                  </Button>
                 </Control>
               </Field>
               <Block textColor="danger">{"Example"}</Block>
